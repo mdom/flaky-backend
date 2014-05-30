@@ -1,0 +1,12 @@
+=pod
+
+=head1 NAME
+
+flaky-backend - simulate a flaky backend
+
+=head1 DESCRIPTION
+
+flaky-backend simulates a backend that generates error messages sporadical.
+
+The url I</500/50> generates 500 responses half the time, whereas
+I</503/100> always returns a 503.
