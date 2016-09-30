@@ -4,27 +4,28 @@ use strict;
 use warnings;
 use Mojolicious::Lite;
 
-get '/:code/:freq' => [ code => qr/\d{3}/, freq => qr/\d+/ ] => { code => 403, freq => 100 } => sub {
-	my $self = shift;
-	my $freq = $self->param('freq');
-	my $rand = int(rand(100));
-	my $code = $rand < $freq ? $self->param('code'): 200;
-	$self->render( status => $code, text => "Returned with http status $code");
-};
+get '/:code/:freq' => [ code => qr/\d{3}/, freq => qr/\d+/ ] =>
+  { code => 403, freq => 100 } => sub {
+    my $self = shift;
+    my $freq = $self->param('freq');
+    my $rand = int( rand(100) );
+    my $code = $rand < $freq ? $self->param('code') : 200;
+    $self->render( status => $code, text => "Returned with http status $code" );
+  };
 
 get '/close' => sub {
-	exit 0;
+    exit 0;
 };
 
 get '/timeout' => sub {
-	sleep 3600;
-	shift->render( status => 200 , text => "Long time later");
+    sleep 3600;
+    shift->render( status => 200, text => "Long time later" );
 };
 
 get '/header/*foo' => sub {
-	my $self = shift;
-	my $code = $self->req->headers->header('X-Flaky-Code') || '200';
-	$self->render( status => $code, text => "Return $code" );
+    my $self = shift;
+    my $code = $self->req->headers->header('X-Flaky-Code') || '200';
+    $self->render( status => $code, text => "Return $code" );
 };
 
 app->start;
